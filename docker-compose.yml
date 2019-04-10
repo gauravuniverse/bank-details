@@ -1,0 +1,25 @@
+version: '3'
+services:
+  bankdetails-psql:
+    image: postgres
+    container_name: bankdetails-psql
+    hostname: bankdetails-psql
+    ports:
+      - "54321:5432"
+    environment:
+      - POSTGRES_USER=
+      - POSTGRES_PASSWORD=
+      - POSTGRES_DB=bank
+    restart: always
+    volumes:
+      - ./indian_banks.sql:/opt/app/indian_banks.sql
+
+  bankdetails:
+    build: .
+    restart: always
+    container_name: bankdetails
+    ports:
+      - "80:8080"
+    working_dir: /opt/app
+    depends_on:
+      - bankdetails-psql
